@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block body %}
+ <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Perfect CRM</a>
+
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+
+          <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ request.user.name }} <span class="caret"></span></a>
+
+                <li><a href="#">配置</a></li>
+                <li><a href="{% url 'acc_logout' %}">注销</a></li>
+
+        </li>
+
+
+{#            <li><a href="https://v3.bootcss.com/examples/dashboard/#">Settings</a></li>#}
+{#            <li><a href="https://v3.bootcss.com/examples/dashboard/#">Profile</a></li>#}
+{#            <li><a href="https://v3.bootcss.com/examples/dashboard/#">Help</a></li>#}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+              {% for role in  request.user.role.all %}
+                  {% for menu in role.menus.all %}
+                      <li class=""><a href="{% if menu.url_type == 0 %}{%  url  menu.url_name %} {% else %}{{ menu.url_name }}{% endif %}">{{ menu.name }}</a></li>
+                  {% endfor %}
+
+              {% endfor%}
+             <li><a href="/king_admin/">首页</a></li>
+
+          </ul>
+
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+ {% block page-content %}
+
+        {% endblock %}
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery.min.js.下载"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/static/js/bootstrap.min.js.下载"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="/static/js/holder.min.js.下载"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/static/js/ie10-viewport-bug-workaround.js.下载"></script>
+
+
+
+ </body>
+{% endblock %}

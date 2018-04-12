@@ -1,0 +1,31 @@
+{%  extends 'king_admin/table_index.html' %}
+
+{% load tags %}
+{% block container %}
+    <ol class="breadcrumb">
+     <li><a href="/king_admin/">Home</a></li>
+<li><a href="/king_admin/">{{ app_name }}</a></li>
+    <li><a href="/king_admin/{{ app_name }}/{{ table_name }}">{{ table_name }}</a></li>
+    <li><a href="/king_admin/{{ app_name }}/{{ table_name }}/{{obj.id }}/change/">{{obj.id }}</a></li>
+    </ol>
+    <h1>{{ app_name }}</h1>
+
+  <h1> {{ table_name }}</h1>
+    <h1> {{ obj.id }}</h1>
+    <h4>Are you sure?</h4>
+    <h3 class="page-header alert-danger">注意：以下与{{ obj }}相关的内容数据都将会被删除！</h3>
+<h1>{{ fields }}</h1>
+    <h1>{{ m2m_fields }}</h1>
+    <h3>delete      {{ obj}}</h3>
+    {% make_obj_list app_name table_name obj.id %}
+    <form method="post" >
+    {% csrf_token %}
+        <div class="col-lg-1"><input type="submit" class="btn btn-danger" name="delete_confirm" value="yes"/></div>
+
+        <div class="col-lg-1"><a type="submit" class="btn btn-info"  href="{% url 'table_obj_change' app_name table_name obj.id %}">返回</a></div>
+    </form>
+    <div>
+
+    </div>
+
+{% endblock %}

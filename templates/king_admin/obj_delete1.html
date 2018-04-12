@@ -1,0 +1,43 @@
+{%  extends 'king_admin/table_index.html' %}
+
+{% load tags %}
+{% block container %}
+<ol class="breadcrumb">
+     <li><a href="/king_admin/">Home</a></li>
+<li><a href="/king_admin/">{{ app_name }}</a></li>
+    <li><a href="/king_admin/{{ app_name }}/{{ table_name }}">{{ table_name }}</a></li>
+    <li><a href="/king_admin/{{ app_name }}/{{ table_name }}/{{obj.id }}/change/">{{obj.id }}</a></li>
+    </ol>
+    <h1>{{ app_name }}</h1>
+
+  <h1> {{ table_name }}</h1>
+
+    <h4>Are you sure?</h4>
+    <h3 class="page-header alert-danger">注意：以下与{{ objs }}相关的内容数据都将会被删除！</h3>
+<h1>{{ fields }}</h1>
+    <h1>{{ m2m_fields }}</h1>
+
+
+    {% for obj in objs %}
+        <h3>delete      {{ obj}}</h3>
+    {% make_obj_list app_name table_name obj.id %}
+    {% endfor %}
+    <form method="post"   >
+    {% csrf_token %}
+
+                <input class="hidden" name='selected_obj' value="{% for obj in objs %}{{ obj.id}} {% endfor %}"/>
+    <input name="action" type="hidden" value="delete_selected_objs"/>
+    <input type="submit" class="btn btn-danger pull-left" name="delete_confirm" value="yes"/>
+
+    <a type="submit" class="btn btn-info" href="{% url 'table_objs' app_name table_name %}">返回</a>
+    </form>
+    <div>
+
+    </div>
+<script>
+   function funcdelete() {
+    console.log(objs);
+    return objs;
+}
+</script>
+{% endblock %}

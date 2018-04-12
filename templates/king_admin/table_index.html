@@ -1,0 +1,41 @@
+{% extends 'index.html' %}
+{% load tags %}
+
+
+{% block page-content %}
+
+
+
+{# <h1>{{ table_list }}</h1>#}
+
+
+
+    {% block container %}
+     {% for app_name,app_tables in table_list.items %}
+        <ol class="breadcrumb">
+     <li><a href="/king_admin/">Home</a></li>
+    </ol>
+    <table class="table table-hover">
+
+    <tbody>
+     {% for table_name,tables in app_tables.items %}
+    <tr>
+        <td>
+            <a href="{%  url 'table_objs' app_name table_name %}">
+         {% render_app_name tables %}
+            </a>
+        </td>
+    <td><a href="{% url 'table_obj_add' app_name table_name %}">
+        add
+        </a>
+    </td>
+
+    </tr>
+     {% endfor %}
+    </tbody>
+    </table>
+
+
+    {% endfor %}
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends 'king_admin/table_index.html' %}
+{% load tags %}
+
+
+{% block container %}
+    <ol class="breadcrumb">
+     <li><a href="/king_admin/">Home</a></li>
+<li><a href="/king_admin/{%  get_app_name  admin_class %}/{% get_model admin_class %}">{% get_model admin_class %}</a></li>
+
+    </ol>
+    <div  class="panel panel-info">
+    <div class="panel panel-heading">
+    <h3 class="panel-title">{% get_model_name admin_class %}
+    <a type='button' href="{{ request.path }}add/" class="pull-right btn-info">Add</a>
+    </h3>
+    </div>
+    </div>
+    <div class="panel-body">
+
+    <form class="" method="get">
+
+
+       {% for filter_field in admin_class.list_filters %}
+
+       <div class="col-lg-2">
+       {{ filter_field }}
+        <span>
+            {% render_filter_ele filter_field admin_class filter_condtions %}
+       </span>
+
+
+       </div>
+
+      {% endfor %}
+    <hr/>
+       <div class="row">
+      <div class="col-lg-3"　>
+        <input type="search" name="_q" class="form-control" style="margin-left:15px" \
+               value="{{ search_text }}"
+       placeholder="{% for search_field in admin_class.search_fields %}
+     {{ search_field }},
+      {% endfor %} ">
+       </div>
+        <div class="col-lg-3"　>
+            <button type="submit" class="btn btn-success"  >检索</button>
+       </div>
+       </div>
+        </form>
+    <hr>
+    <form onsubmit="return submit_action()" method="post" id="form_sub">
+    {% csrf_token %}
+        <div class="col-lg-3">
+            <select name="action" class="form-control" id="action_list">
+            <option value="">-----------</option>
+                {% for actions in admin_class.actions %}
+
+                <option value="{{ actions }}">{{ actions }}</option>
+                {% endfor %}
+
+            </select>
+
+        </div>
+    <div class="col-lg-1">
+        <button type="submit" >Go</button>
+    </div>
+    </form>
+
+
+
+
+
+</div>
+    <table class="table table-hover">
+  <thead>
+  <tr>
+  <td style="width:10px;" ><input type="checkbox"  onclick="Toggle_check(this)"/></td>
+
+      {% for column in admin_class.list_display %}
+{#      <th>#}
+{#         <a href="?o={{ column }}"> {{ column}}</a>#}
+{##}
+{#      </th>#}
+          {% build_table_header_column column orderby_key filter_condtions admin_class %}
+      {% endfor %}
+
+
+  </tr>
+
+  </thead>
+    <tfoot>
+
+    <tr>
+        <td></td>
+        <td>总计{{ query_sets.paginator.count }}条</td></tr>
+    </tfoot>
+    <tbody>
+
+    {% for obj in query_sets %}
+    <tr>
+        <td style="width:10px;" ><input type="checkbox" tag="obj_checkbox" value="{{ obj.id }}"/></td>
+         {% build_table_row obj request admin_class %}
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+ <nav>
+
+              <ul class="pagination">
+                  {% if query_sets.has_previous %}
+                        <li class=""><a href="?page={{ query_sets.previous_page_number }}">上页</a></li>
+                  {% endif %}
+{#                   <li class="active"><a>{{ query_sets.number }}</a></li>#}
+
+{#                  {% for loop_counter in query_sets.paginator.page_range %}#}
+{#                        {% render_page_ele  loop_counter query_sets filter_condtions%}#}
+{#                  {% endfor %}#}
+
+                  {% build_paginators query_sets  filter_condtions previous_orderby search_text%}
+
+                  {% if query_sets.has_next %}
+                        <li class=""><a href="?page={{ query_sets.next_page_number }}">下页</a></li>
+                  {% endif %}
+
+
+{#                <li class="disabled"><a href="#">&laquo;</a></li>#}
+{#                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>#}
+{#                #}
+              </ul>
+          </nav>
+    <script>
+    function Toggle_check(ele){
+         {#if ( $(ele).prop("checked")){#}
+         {#       $("input[tag='obj_checkbox']").prop("checked",true);#}
+         {#   }else {#}
+         {#       $("input[tag='obj_checkbox']").prop("checked",false);#}
+         {#   }#}
+         if ($(ele).prop('checked')){
+             console.log('yes');
+             $('input[tag="obj_checkbox"]').prop('checked',true)
+         }else {
+             $('input[tag="obj_checkbox"]').prop('checked',false)
+         }
+    }
+    function submit_action() {
+        var selected_ids=[];
+        $("input[tag='obj_checkbox']:checked").each(function()
+        {
+            selected_ids.push($(this).val());
+            console.log(selected_ids)
+        })
+        var selected_action=$('#action_list').val();
+        {#console.log(selected_action);#}
+
+        if (selected_ids.length==0)
+        {
+            console.log('没有选中');
+
+        }
+        if (!selected_action){
+            console.log('没有动作');
+        }
+
+        var selected_ele='<input name="selected_ids" type="hidden" value="'+selected_ids+'">';
+        console.log(selected_ids)
+        $("#form_sub").append(selected_ele);
+
+    }
+
+
+    </script>
+
+{% endblock %}

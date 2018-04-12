@@ -1,0 +1,48 @@
+  {% extends 'base.html' %}
+{% load crm_tags %}
+{% block body %}
+
+
+    <div id="content" class="col-lg-7 col-lg-offset-2">
+    <h3>学员缴费记录</h3>
+        <h3>学员基本信息审核</h3>
+         <div class="form-horizontal">
+
+           {{ customer_form}}
+
+       </div>
+
+
+            <hr>
+            <h3>报名信息</h3>
+<div  class="row">
+      <div class="form-group">
+         <label class="col-sm-2 control-label">客户姓名</label>
+        <div class="col-sm-10">{{ enroll_obj.customer }}</div>
+     </div>
+    <hr>
+    <div class="form-group">
+         <label class="col-sm-2 control-label">所报班级</label>
+        <div class="col-sm-10">{{ enroll_obj.enrolled_class}}</div>
+     </div>
+</div>
+
+
+
+            <a  href="{% url 'enrollment_rejection'  enroll_obj.id %}" class="btn btn-danger">驳回合同</a>
+            <a href="{% url 'payment' enroll_obj.id %}" class="btn btn-success pull-right" >审核通过</a>
+        <div class="row">
+            <div >
+                <ul>
+                    {% for k,v in msgs.items %}
+                    <li>{{ k }}:{{ v }}</li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

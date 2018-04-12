@@ -1,0 +1,41 @@
+{%  extends 'king_admin/table_index.html' %}
+{% load tags %}
+{% block container %}
+<ol class="breadcrumb">
+     <li><a href="/king_admin/">Home</a></li>
+  <li><a href="/king_admin/">{{ app_name }}</a></li>
+    <li><a href="/king_admin/{{ app_name }}/{{ table_name }}">{{table_name }}</a></li>
+
+    </ol>
+ <h2>table</h2>
+
+    <form method="post" role="form">
+    <span style="color: red">{{ obj.errors }}</span>
+    {% csrf_token %}
+
+    <table class="table">
+     {% for field in obj %}
+         <tr>
+         <td>
+         {{ field.label }}
+         </td>
+             {%  if field.name in admin_class.filter_horizontal %}
+
+                 <td >{{ field }}</td>
+
+             {% else %}
+                 <td >{{ field }}</td>
+
+             {% endif %}
+
+
+
+
+
+
+         </tr>
+        {% endfor %}
+    </table>
+    <button type="submit" class="btn btn-success pull-right">Save</button>
+    </form>
+{% endblock %}
